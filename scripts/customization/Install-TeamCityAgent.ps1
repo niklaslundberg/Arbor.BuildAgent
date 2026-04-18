@@ -29,11 +29,40 @@ Expand-Archive -Path $zipPath -DestinationPath $InstallDir -Force
 
 $confPath = Join-Path $InstallDir 'conf\buildAgent.properties'
 if (Test-Path -LiteralPath $confPath) {
-    (Get-Content -LiteralPath $confPath)
-        .Replace('serverUrl=', "serverUrl=$ServerUrl")
-        .Replace('name=', "name=$AgentName")
-        .Replace('workDir=', "workDir=$WorkDir") |
-        Set-Content -LiteralPath $confPath
+    $lines = Get-Content -LiteralPath $confPath
+    $keys = @{
+        serverUrl = $false
+        name      = $false
+        workDir   = $false
+    }
+
+    $updated = foreach ($line in $lines) {
+        if ($line -match '^serverUrl=') {
+            $keys.serverUrl = $true
+            "serverUrl=$ServerUrl"
+            continue
+        }
+
+        if ($line -match '^name=') {
+            $keys.name = $true
+            "name=$AgentName"
+            continue
+        }
+
+        if ($line -match '^workDir=') {
+            $keys.workDir = $true
+            "workDir=$WorkDir"
+            continue
+        }
+
+        $line
+    }
+
+    if (-not $keys.serverUrl) { $updated += "serverUrl=$ServerUrl" }
+    if (-not $keys.name) { $updated += "name=$AgentName" }
+    if (-not $keys.workDir) { $updated += "workDir=$WorkDir" }
+
+    Set-Content -LiteralPath $confPath -Value $updated
 }
 
 Write-Host 'TeamCity build agent files prepared. Register/start agent service according to your environment policy.'

@@ -6,7 +6,11 @@ param(
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
-    [string]$OsName = 'windows2025'
+    [string]$OsName = 'windows2025',
+
+    [Parameter()]
+    [ValidateNotNullOrEmpty()]
+    [string]$UserAgent = 'Arbor.BuildAgent/1.0'
 )
 
 $ProgressPreference = 'SilentlyContinue'
@@ -14,7 +18,7 @@ $ProgressPreference = 'SilentlyContinue'
 $uri = "https://api.github.com/repos/$Repository/releases/latest"
 $headers = @{
     'Accept' = 'application/vnd.github+json'
-    'User-Agent' = 'Arbor.BuildAgent'
+    'User-Agent' = $UserAgent
 }
 
 $release = $null

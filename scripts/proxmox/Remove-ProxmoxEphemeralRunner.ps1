@@ -40,6 +40,10 @@ try {
 }
 
 $deleteUri = "$ProxmoxApiBaseUrl/api2/json/nodes/$Node/qemu/$EphemeralVmId"
-Invoke-RestMethod -Method Delete -Uri $deleteUri -Headers $headers -Body @{ purge = 1; 'destroy-unreferenced-disks' = 1 } | Out-Null
+try {
+    Invoke-RestMethod -Method Delete -Uri $deleteUri -Headers $headers -Body @{ purge = 1; 'destroy-unreferenced-disks' = 1 } -ErrorAction Stop | Out-Null
+} catch {
+    throw "Failed to delete Proxmox VM '$EphemeralVmId': $($_.Exception.Message)"
+}
 
 Write-Host "Removed Proxmox VM '$EphemeralVmId' and purged ephemeral disks."

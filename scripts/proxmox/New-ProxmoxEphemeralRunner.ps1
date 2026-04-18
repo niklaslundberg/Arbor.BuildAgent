@@ -40,7 +40,7 @@ $cloneBody = @{
 
 Invoke-RestMethod -Method Post -Uri $cloneUri -Headers $headers -Body $cloneBody | Out-Null
 
-# Enable nested virtualization hints in VM args for Intel hosts. Adjust for AMD if needed.
+# Enable nested virtualization hints in VM args for Intel hosts (+vmx). AMD equivalent is +svm.
 $configUri = "$ProxmoxApiBaseUrl/api2/json/nodes/$Node/qemu/$EphemeralVmId/config"
 Invoke-RestMethod -Method Put -Uri $configUri -Headers $headers -Body @{ args = '-cpu host,+vmx' } | Out-Null
 

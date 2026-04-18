@@ -38,13 +38,27 @@ if (-not (Test-Path -LiteralPath $ParentVhdxPath)) {
 
 New-Item -ItemType Directory -Path $TempDiskDirectory -Force | Out-Null
 $tempVhdx = Join-Path $TempDiskDirectory ("$VmName-temp.vhdx")
+$vmCreated = $false
 
-New-VHD -Path $tempVhdx -ParentPath $ParentVhdxPath -Differencing | Out-Null
+try {
+    New-VHD -Path $tempVhdx -ParentPath $ParentVhdxPath -Differencing -ErrorAction Stop | Out-Null
 
-New-VM -Name $VmName -Generation 2 -MemoryStartupBytes $StartupMemoryBytes -VHDPath $tempVhdx -SwitchName $SwitchName | Out-Null
-Set-VMProcessor -VMName $VmName -Count $CpuCount -ExposeVirtualizationExtensions $true
-Set-VM -Name $VmName -AutomaticStopAction ShutDown | Out-Null
-Start-VM -Name $VmName | Out-Null
+    New-VM -Name $VmName -Generation 2 -MemoryStartupBytes $StartupMemoryBytes -VHDPath $tempVhdx -SwitchName $SwitchName -ErrorAction Stop | Out-Null
+    $vmCreated = $true
+    Set-VMProcessor -VMName $VmName -Count $CpuCount -ExposeVirtualizationExtensions $true -ErrorAction Stop
+    Set-VM -Name $VmName -AutomaticStopAction ShutDown -ErrorAction Stop | Out-Null
+    Start-VM -Name $VmName -ErrorAction Stop | Out-Null
+} catch {
+    if ($vmCreated -and (Get-VM -Name $VmName -ErrorAction SilentlyContinue)) {
+        Remove-VM -Name $VmName -Force -ErrorAction SilentlyContinue
+    }
+
+    if (Test-Path -LiteralPath $tempVhdx) {
+        Remove-Item -LiteralPath $tempVhdx -Force -ErrorAction SilentlyContinue
+    }
+
+    throw
+}
 
 [pscustomobject]@{
     VmName                   = $VmName
