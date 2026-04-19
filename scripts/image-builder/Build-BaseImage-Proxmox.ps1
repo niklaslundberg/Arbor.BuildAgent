@@ -140,7 +140,7 @@ $repoRoot     = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
 $templatePath = Join-Path $repoRoot 'images\proxmox\windows2025.pkr.hcl'
 $isoOut       = Join-Path $repoRoot 'images\common\autounattend.iso'
 
-Write-Host '=== Arbor.BuildAgent – Build-BaseImage-Proxmox ===' -ForegroundColor Cyan
+Write-Host '=== Arbor.BuildAgent - Build-BaseImage-Proxmox ===' -ForegroundColor Cyan
 
 # --- 1. Prerequisite checks -----------------------------------------------
 
@@ -224,13 +224,13 @@ if (-not $SkipScriptDownload) {
 
 # --- 5. packer init -------------------------------------------------------
 
-Write-Host 'Initialising Packer plugins...'
+Write-Host 'Initializing Packer plugins...'
 Set-Location $repoRoot
 packer init $templatePath
 
 # --- 6. packer build -------------------------------------------------------
 
-Write-Host 'Starting Packer build – this will take 4-8 hours for a full runner image.' -ForegroundColor Yellow
+Write-Host 'Starting Packer build - this will take 4-8 hours for a full runner image.' -ForegroundColor Yellow
 
 $logDir  = Join-Path $repoRoot 'output\proxmox\logs'
 New-Item -ItemType Directory -Path $logDir -Force | Out-Null

@@ -57,7 +57,7 @@ try {
         Remove-Item -LiteralPath $tempVhdx -Force -ErrorAction SilentlyContinue
     }
 
-    throw
+    throw "Failed to provision Hyper-V VM '$VmName': $($_.Exception.Message)"
 }
 
 [pscustomobject]@{

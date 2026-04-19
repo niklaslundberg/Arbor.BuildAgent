@@ -28,7 +28,7 @@ Start-Service -Name WinRM
 # The base image receives a full Defender scan at the end of the Packer build.
 Set-MpPreference -DisableRealtimeMonitoring $true -ErrorAction SilentlyContinue
 
-# Disable UAC consent prompts – scripts run as Administrator already
+# Disable UAC consent prompts - scripts run as Administrator already
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' `
     -Name 'ConsentPromptBehaviorAdmin' -Value 0
 

@@ -91,7 +91,7 @@ $repoRoot     = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
 $templatePath = Join-Path $repoRoot 'images\hyperv\windows2025.pkr.hcl'
 $isoOut       = Join-Path $repoRoot 'images\common\autounattend.iso'
 
-Write-Host '=== Arbor.BuildAgent – Build-BaseImage-HyperV ===' -ForegroundColor Cyan
+Write-Host '=== Arbor.BuildAgent - Build-BaseImage-HyperV ===' -ForegroundColor Cyan
 
 # --- 1. Prerequisite checks -----------------------------------------------
 
@@ -137,13 +137,13 @@ if (-not $SkipScriptDownload) {
 
 # --- 5. packer init -------------------------------------------------------
 
-Write-Host 'Initialising Packer plugins...'
+Write-Host 'Initializing Packer plugins...'
 Set-Location $repoRoot
 packer init $templatePath
 
 # --- 6. packer build -------------------------------------------------------
 
-Write-Host 'Starting Packer build – this will take 4-8 hours for a full runner image.' -ForegroundColor Yellow
+Write-Host 'Starting Packer build - this will take 4-8 hours for a full runner image.' -ForegroundColor Yellow
 
 $env:PACKER_LOG = '1'
 $env:PACKER_LOG_PATH = Join-Path $OutputDirectory 'packer.log'

@@ -72,7 +72,7 @@ Get-ChildItem -LiteralPath $SourceDirectory -File | ForEach-Object {
     $fsi.Root.AddTree($_.FullName, $false)
 }
 
-# Finalise image and stream to disk
+# Finalize image and stream to disk
 $resultImage = $fsi.CreateResultImage()
 $isoStream   = $resultImage.ImageStream
 
