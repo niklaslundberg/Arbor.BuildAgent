@@ -14,7 +14,7 @@ Provide disposable Windows build agents that are:
 GitHub-hosted VM images are not published as directly downloadable general-purpose VHDX/OVA artifacts for on-prem reuse. The practical approach is:
 
 1. Track latest image release metadata from `actions/runner-images`
-2. Build or refresh your own base image from your chosen source image
+2. Build your own base image using the official provisioning scripts (see [build-base-image.md](build-base-image.md))
 3. Apply your customization scripts from this repository
 4. Launch ephemeral VMs from that base image/template
 
@@ -25,6 +25,29 @@ Use:
 ```
 
 This gives you the latest upstream release/tag reference so your process always points to the newest published runner-image metadata.
+
+## Building the base image
+
+See **[build-base-image.md](build-base-image.md)** for the full guide.  In summary:
+
+```powershell
+# Hyper-V (run elevated on the Hyper-V host)
+./scripts/image-builder/Build-BaseImage-HyperV.ps1 -IsoPath "D:\ISOs\WS2025.iso"
+
+# Proxmox
+./scripts/image-builder/Build-BaseImage-Proxmox.ps1 `
+    -ProxmoxApiBaseUrl "https://pve01:8006/api2/json" `
+    -Node pve01 -TokenId "packer@pve!packer" -TokenSecret "<secret>" `
+    -WindowsIsoFile "local:iso/WS2025.iso"
+```
+
+The build process:
+1. Boots a Windows Server 2025 evaluation VM from your ISO
+2. Installs Windows unattended (autounattend.xml)
+3. Enables WinRM so Packer can connect
+4. Clones `actions/runner-images` and runs all tool-install scripts (VS, .NET SDKs, Node, Go, Python, …)
+5. Runs Sysprep to generalise the image for cloning
+6. Outputs a VHDX (Hyper-V) or Proxmox template ready for linked clones
 
 ## Recommended architecture
 
