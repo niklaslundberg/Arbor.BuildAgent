@@ -26,7 +26,7 @@ inside Azure), the resulting image works with Hyper-V and Proxmox.
 │       └─► Clones actions/runner-images @ <ref>                        │
 │           copies build scripts + toolset.json locally                 │
 │                                                                        │
-│  3. packer build images/hyperv/windows2025.pkr.hcl   (or proxmox)    │
+│  3. packer build images/hyperv/windows-2025-vs2026.pkr.hcl   (or proxmox)    │
 │       a. Boots Windows Server 2025 from evaluation ISO                │
 │       b. autounattend.xml auto-installs Windows + creates packer user │
 │       c. winrm-setup.ps1 enables WinRM for Packer communication       │
@@ -103,13 +103,13 @@ A minimal build (`-InstallFullTools $false`) takes about 30–60 minutes.
 
 The script installs Packer if missing, creates the autounattend ISO, downloads
 the runner-images scripts, and runs the full Packer build.  Progress is
-displayed on the console and logged to `output/hyperv/windows2025-runner-base/packer.log`.
+displayed on the console and logged to `output/hyperv/windows-2025-vs2026/packer.log`.
 
 When the build completes you will see:
 
 ```
 === Build complete ===
-Base image VHDX : D:\output\hyperv\windows2025-runner-base\windows2025-runner-base.vhdx  (65432 MB)
+Base image VHDX : D:\output\hyperv\windows-2025-vs2026\windows-2025-vs2026.vhdx  (65432 MB)
 
 Next step: use this VHDX as -ParentVhdxPath with:
   ./scripts/hyperv/New-HyperVEphemeralRunner.ps1 -ParentVhdxPath 'D:\output\...\..vhdx' ...
@@ -226,21 +226,21 @@ If you prefer to call Packer directly:
 
 # Hyper-V
 cd <repo-root>
-packer init images/hyperv/windows2025.pkr.hcl
+packer init images/hyperv/windows-2025-vs2026.pkr.hcl
 packer build `
     -var "iso_url=D:/ISOs/WS2025.iso" `
     -var "autounattend_iso=images/common/autounattend.iso" `
-    images/hyperv/windows2025.pkr.hcl
+    images/hyperv/windows-2025-vs2026.pkr.hcl
 
 # Proxmox
-packer init images/proxmox/windows2025.pkr.hcl
+packer init images/proxmox/windows-2025-vs2026.pkr.hcl
 packer build `
     -var "proxmox_url=https://pve01:8006/api2/json" `
     -var "proxmox_node=pve01" `
     -var "proxmox_token_id=packer@pve!packer" `
     -var "proxmox_token_secret=<secret>" `
     -var "iso_file=local:iso/WS2025.iso" `
-    images/proxmox/windows2025.pkr.hcl
+    images/proxmox/windows-2025-vs2026.pkr.hcl
 ```
 
 ---

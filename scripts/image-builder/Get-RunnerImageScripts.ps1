@@ -9,7 +9,7 @@
     that GitHub uses to provision their hosted runner VMs.  This script makes
     those scripts available locally for use in the Packer image build.
 
-    The toolset JSON (e.g. toolset-2022.json) is copied to
+    The toolset JSON (e.g. toolset-2025.json) is copied to
     $DestinationDir/toolset.json so the install scripts find it at the path
     they expect ($env:TEMP or a well-known location).
 
@@ -44,9 +44,12 @@ param(
     [ValidateNotNullOrEmpty()]
     [string]$DestinationDir = (Join-Path $PSScriptRoot '..\..\images\runner-image-scripts'),
 
+    # Default toolset targets the windows-2025-vs2026 image.
+    # The upstream repository uses toolset-2025.json for VS 2026 images when available;
+    # the script falls back to toolset-2022.json automatically if 2025 is not yet present.
     [Parameter()]
     [ValidateNotNullOrEmpty()]
-    [string]$ToolsetName = 'toolset-2022.json'
+    [string]$ToolsetName = 'toolset-2025.json'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -74,6 +77,11 @@ if ($useGit) {
 
     $scriptsSource = Join-Path $repoDir 'images/windows/scripts'
     $toolsetSource = Join-Path $repoDir "images/windows/toolsets/$ToolsetName"
+    # Fallback: if the requested toolset does not exist, try toolset-2022.json
+    if (-not (Test-Path -LiteralPath $toolsetSource)) {
+        Write-Warning "$ToolsetName not found; falling back to toolset-2022.json"
+        $toolsetSource = Join-Path $repoDir 'images/windows/toolsets/toolset-2022.json'
+    }
 } else {
     # Fall back to downloading the archive via the GitHub API
     Write-Host "git not found – downloading archive from GitHub..."
@@ -90,6 +98,11 @@ if ($useGit) {
     $repoDir  = (Get-ChildItem -LiteralPath $extractPath -Directory | Select-Object -First 1).FullName
     $scriptsSource = Join-Path $repoDir 'images/windows/scripts'
     $toolsetSource = Join-Path $repoDir "images/windows/toolsets/$ToolsetName"
+    # Fallback: if the requested toolset does not exist, try toolset-2022.json
+    if (-not (Test-Path -LiteralPath $toolsetSource)) {
+        Write-Warning "$ToolsetName not found; falling back to toolset-2022.json"
+        $toolsetSource = Join-Path $repoDir 'images/windows/toolsets/toolset-2022.json'
+    }
 }
 
 # Copy scripts directory into DestinationDir

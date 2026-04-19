@@ -9,8 +9,8 @@
 #
 # Build:
 #   cd <repo-root>
-#   packer init images/hyperv/windows2025.pkr.hcl
-#   packer build -var "iso_url=D:/ISOs/WS2025.iso" images/hyperv/windows2025.pkr.hcl
+#   packer init images/hyperv/windows-2025-vs2026.pkr.hcl
+#   packer build -var "iso_url=D:/ISOs/WS2025.iso" images/hyperv/windows-2025-vs2026.pkr.hcl
 
 packer {
   required_plugins {
@@ -44,13 +44,13 @@ variable "autounattend_iso" {
 
 variable "vm_name" {
   type    = string
-  default = "windows2025-runner-base"
+  default = "windows-2025-vs2026"
 }
 
 variable "output_directory" {
   description = "Directory where the finished VHDX template is stored."
   type        = string
-  default     = "output/hyperv/windows2025-runner-base"
+  default     = "output/hyperv/windows-2025-vs2026"
 }
 
 variable "cpus" {
@@ -98,7 +98,7 @@ variable "sysprep_before_export" {
 # Source
 # ---------------------------------------------------------------------------
 
-source "hyperv-iso" "windows2025" {
+source "hyperv-iso" "windows-2025-vs2026" {
   vm_name  = var.vm_name
   iso_url  = var.iso_url
   iso_checksum = var.iso_checksum
@@ -145,8 +145,8 @@ source "hyperv-iso" "windows2025" {
 # ---------------------------------------------------------------------------
 
 build {
-  name    = "windows2025-runner-base"
-  sources = ["source.hyperv-iso.windows2025"]
+  name    = "windows-2025-vs2026"
+  sources = ["source.hyperv-iso.windows-2025-vs2026"]
 
   # --- 1. Upload helper scripts into the guest --------------------------------
 

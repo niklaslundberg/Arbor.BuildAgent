@@ -9,7 +9,7 @@
       2. Installs Packer via winget if missing
       3. Creates the autounattend ISO and uploads it to Proxmox ISO storage
       4. Optionally downloads runner-images scripts
-      5. Runs 'packer init' then 'packer build' for images/proxmox/windows2025.pkr.hcl
+      5. Runs 'packer init' then 'packer build' for images/proxmox/windows-2025-vs2026.pkr.hcl
       6. Reports the resulting Proxmox template VMID
 
     The resulting Proxmox template is used as the clone source for all
@@ -137,7 +137,7 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference    = 'SilentlyContinue'
 
 $repoRoot     = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
-$templatePath = Join-Path $repoRoot 'images\proxmox\windows2025.pkr.hcl'
+$templatePath = Join-Path $repoRoot 'images\proxmox\windows-2025-vs2026.pkr.hcl'
 $isoOut       = Join-Path $repoRoot 'images\common\autounattend.iso'
 
 Write-Host '=== Arbor.BuildAgent - Build-BaseImage-Proxmox ===' -ForegroundColor Cyan

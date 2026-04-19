@@ -10,13 +10,13 @@
 #
 # Build:
 #   cd <repo-root>
-#   packer init images/proxmox/windows2025.pkr.hcl
+#   packer init images/proxmox/windows-2025-vs2026.pkr.hcl
 #   packer build \
 #     -var "proxmox_url=https://proxmox.example.com:8006/api2/json" \
 #     -var "proxmox_node=pve01" \
 #     -var "proxmox_token_id=packer@pve!packer" \
 #     -var "proxmox_token_secret=<secret>" \
-#     images/proxmox/windows2025.pkr.hcl
+#     images/proxmox/windows-2025-vs2026.pkr.hcl
 
 packer {
   required_plugins {
@@ -83,7 +83,7 @@ variable "disk_storage" {
 
 variable "template_name" {
   type    = string
-  default = "windows2025-runner-base"
+  default = "windows-2025-vs2026"
 }
 
 variable "template_description" {
@@ -141,7 +141,7 @@ variable "sysprep_before_export" {
 # Source
 # ---------------------------------------------------------------------------
 
-source "proxmox-iso" "windows2025" {
+source "proxmox-iso" "windows-2025-vs2026" {
   proxmox_url              = var.proxmox_url
   node                     = var.proxmox_node
   token                    = "${var.proxmox_token_id}=${var.proxmox_token_secret}"
@@ -220,8 +220,8 @@ source "proxmox-iso" "windows2025" {
 # ---------------------------------------------------------------------------
 
 build {
-  name    = "windows2025-runner-base"
-  sources = ["source.proxmox-iso.windows2025"]
+  name    = "windows-2025-vs2026"
+  sources = ["source.proxmox-iso.windows-2025-vs2026"]
 
   # Upload helper scripts
   provisioner "file" {

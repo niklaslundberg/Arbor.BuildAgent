@@ -9,7 +9,7 @@
       2. Installs Packer via winget if missing
       3. Creates the autounattend ISO (no Windows ADK needed)
       4. Optionally downloads the runner-images scripts from actions/runner-images
-      5. Runs 'packer init' then 'packer build' for images/hyperv/windows2025.pkr.hcl
+      5. Runs 'packer init' then 'packer build' for images/hyperv/windows-2025-vs2026.pkr.hcl
       6. Reports the path of the finished VHDX
 
     The resulting VHDX is used as the parent (read-only base) disk for all
@@ -66,7 +66,7 @@ param(
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
-    [string]$OutputDirectory = (Join-Path $PSScriptRoot '..\..\output\hyperv\windows2025-runner-base'),
+    [string]$OutputDirectory = (Join-Path $PSScriptRoot '..\..\output\hyperv\windows-2025-vs2026'),
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
@@ -88,7 +88,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $repoRoot     = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
-$templatePath = Join-Path $repoRoot 'images\hyperv\windows2025.pkr.hcl'
+$templatePath = Join-Path $repoRoot 'images\hyperv\windows-2025-vs2026.pkr.hcl'
 $isoOut       = Join-Path $repoRoot 'images\common\autounattend.iso'
 
 Write-Host '=== Arbor.BuildAgent - Build-BaseImage-HyperV ===' -ForegroundColor Cyan

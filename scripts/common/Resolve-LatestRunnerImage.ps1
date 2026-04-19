@@ -6,7 +6,7 @@ param(
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
-    [string]$OsName = 'windows2025',
+    [string]$OsName = 'windows-2025-vs2026',
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]

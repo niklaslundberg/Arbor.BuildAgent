@@ -14,7 +14,7 @@ The goal is to stay close to GitHub-hosted Windows images while keeping runner V
 3. Resolve latest upstream runner-image metadata:
 
    ```powershell
-   ./scripts/common/Resolve-LatestRunnerImage.ps1 -OsName windows2025
+   ./scripts/common/Resolve-LatestRunnerImage.ps1 -OsName windows-2025-vs2026
    ```
 
 4. Use either Hyper-V or Proxmox scripts to create/start ephemeral VMs and remove them when done.

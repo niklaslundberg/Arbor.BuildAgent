@@ -21,7 +21,7 @@ GitHub-hosted VM images are not published as directly downloadable general-purpo
 Use:
 
 ```powershell
-./scripts/common/Resolve-LatestRunnerImage.ps1 -OsName windows2025
+./scripts/common/Resolve-LatestRunnerImage.ps1 -OsName windows-2025-vs2026
 ```
 
 This gives you the latest upstream release/tag reference so your process always points to the newest published runner-image metadata.
